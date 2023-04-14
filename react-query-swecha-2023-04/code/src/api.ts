@@ -20,9 +20,19 @@ export type IComment = {
 	};
 };
 
-const headers = {
+export function makeKeys<T extends string>(resource: T) {
+	return {
+		all: [resource],
+		lists: [resource, "list"] as const,
+		list: (params: unknown) => [resource, "list", params] as const,
+		details: [resource, "detail"] as const,
+		detail: (id: number | string) => [resource, "detail", id] as const,
+	};
+}
+
+const makeHeaders = () => ({
 	Authorization: `Bearer ${import.meta.env.VITE_TOKEN}`,
-};
+});
 
 export async function getIssues({
 	repo = "facebook/react",
@@ -39,7 +49,7 @@ export async function getIssues({
 				...query,
 				per_page: "10",
 			}).toString()}`,
-		{ headers, signal },
+		{ headers: makeHeaders(), signal },
 	);
 	return res.json() as Promise<IIssue[]>;
 }
@@ -54,7 +64,7 @@ export async function getIssue({
 	signal?: AbortSignal;
 }) {
 	const res = await fetch(URL + `/repos/${repo}/issues/${number}`, {
-		headers,
+		headers: makeHeaders(),
 		signal,
 	});
 	return res.json() as Promise<IIssue>;
@@ -70,8 +80,31 @@ export async function getComments({
 	signal?: AbortSignal;
 }) {
 	const res = await fetch(URL + `/repos/${repo}/issues/${number}/comments`, {
-		headers,
+		headers: makeHeaders(),
 		signal,
 	});
 	return res.json() as Promise<IComment[]>;
+}
+
+export async function createComment({
+	repo = "facebook/react",
+	number,
+	body,
+	signal,
+}: {
+	repo?: string;
+	number: string;
+	body: string;
+	signal?: AbortSignal;
+}) {
+	const res = await fetch(URL + `/repos/${repo}/issues/${number}/comments`, {
+		method: "POST",
+		headers: {
+			...makeHeaders(),
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify({ body }),
+		signal,
+	});
+	return res.json() as Promise<IComment>;
 }

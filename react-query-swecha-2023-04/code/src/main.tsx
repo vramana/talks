@@ -10,6 +10,7 @@ import * as Page02 from "./pages/02-fetch-complete";
 import * as Page03 from "./pages/03-simple-query";
 import * as Page04 from "./pages/04-pagination";
 import * as Page05 from "./pages/05-depdendent-queries";
+import * as Page06 from "./pages/06-mutation";
 
 const queryClient = new QueryClient({
 	defaultOptions: {
@@ -52,6 +53,20 @@ const router = createBrowserRouter([
 			{
 				path: "issues/:number",
 				element: <Page05.IssuePage />,
+			},
+		],
+	},
+	{
+		path: "/page-06",
+		element: <Page06.Root />,
+		children: [
+			{
+				path: "",
+				element: <Page06.IssuesPage />,
+			},
+			{
+				path: "issues/:number",
+				element: <Page06.IssuePage />,
 			},
 		],
 	},
