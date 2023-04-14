@@ -27,3 +27,7 @@ API Secret Key
 - TypeScript
 - Query Deduplication
 - Bundle Size
+
+Better error messages
+
+https://wix-ux.com/when-life-gives-you-lemons-write-better-error-messages-46c5223e1a2f
