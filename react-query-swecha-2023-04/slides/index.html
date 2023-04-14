@@ -5,6 +5,8 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Building a robust data layer with react-query</title>
+    <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/styles/base16/one-light.min.css" />
+
   </head>
   <body>
     <div class="reveal">
@@ -58,6 +60,120 @@
           </a>
         </section>
         <section>
+          Let's dive into some code.
+        </section>
+        <section>
+          <section>
+            A simple example with useState and fetch
+          </section>
+          <section data-markdown>
+            <textarea data-template>
+              ```js [1|3-5]
+              const [data, setData] = useState();
+
+              useEffect(() => {
+                getIssues({}).then((data) => setData(data));
+              }, []);
+              ```
+              </textarea>
+          </section>
+          <section data-markdown>
+            Redux example
+          </section>
+          <section data-markdown>
+            <textarea data-template>
+              ```js
+              const issues = useSelector((state) => state.api.issues);
+
+              useEffect(() => {
+                dispatch(getIssues());
+              }, []);
+              ```
+            </textarea>
+          </section>
+
+        </section>
+        <section>
+          <section>
+           Let's add some error handling
+          </section>
+          <section data-markdown>
+            <textarea data-template>
+              ```js [1-3|6,17|7|9-10|13-14]
+                const [data, setData] = useState();
+                const [isLoading, setIsLoading] = useState(true);
+                const [error, setError] = useState();
+
+                useEffect(() => {
+                  const abortController = new AbortController();
+                  getIssues({ signal: abortController.signal })
+                    .then((data) => {
+                      setData(data);
+                      setIsLoading(false);
+                    })
+                    .catch((error) => {
+                      setError(error);
+                      setIsLoading(false);
+                    });
+                  return () => {
+                    abortController.abort();
+                  };
+                }, []);
+              ```
+              </textarea>
+          </section>
+        </section>
+        <section>
+          <section>
+            Now let's try react-query
+          </section>
+          <section data-markdown>
+            <textarea data-template>
+              ```js [1|3|2]
+                const { data, isLoading, error } = useQuery({
+                  queryKey: ["issues"],
+                  queryFn: ({ signal }) => getIssues({ signal }),
+                });
+              ```
+            </textarea>
+          </section>
+          <section>
+            Whenever <b>query key</b> changes, react-query will refetch the data.
+          </section>
+        </section>
+        <section>
+          <p>More examples</p>
+          <ul>
+            <li class="fragment">Pagination</li>
+            <li class="fragment">Dependent Queries</li>
+            <li class="fragment">Mutations</li>
+            <li class="fragment">Query Invalidations</li>
+          </ul>
+        </section>
+        <section>
+          <p>Caching</p>
+          <ul>
+            <li class="fragment">Stale Time</li>
+            <li class="fragment">GC (Cache) Time</li>
+            <li class="fragment">keepPreviousData</li>
+            <li class="fragment">Deduplication</li>
+            <li class="fragment">Prefetch</li>
+          </ul>
+        </section>
+        <section>
+          <p>Retries</p>
+          <ul>
+            <li class="fragment">retry</li>
+            <li class="fragment">retryDelay</li>
+            <li class="fragment">refetchOnWindowFocus</li>
+            <li class="fragment">Query Invalidations</li>
+          </ul>
+        </section>
+        <section>
+          Synergy with React Router
+        </section>
+        <section>
+          Code Structure
         </section>
       </div>
     </div>
