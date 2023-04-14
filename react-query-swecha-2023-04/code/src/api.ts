@@ -8,6 +8,16 @@ export type IIssue = {
 	user: {
 		login: string;
 	};
+	pull_request: unknown;
+	comments: number;
+};
+
+export type IComment = {
+	id: number;
+	body: string;
+	user: {
+		login: string;
+	};
 };
 
 const headers = {
@@ -32,4 +42,36 @@ export async function getIssues({
 		{ headers, signal },
 	);
 	return res.json() as Promise<IIssue[]>;
+}
+
+export async function getIssue({
+	repo = "facebook/react",
+	number,
+	signal,
+}: {
+	repo?: string;
+	number: string;
+	signal?: AbortSignal;
+}) {
+	const res = await fetch(URL + `/repos/${repo}/issues/${number}`, {
+		headers,
+		signal,
+	});
+	return res.json() as Promise<IIssue>;
+}
+
+export async function getComments({
+	repo = "facebook/react",
+	number,
+	signal,
+}: {
+	repo?: string;
+	number: string;
+	signal?: AbortSignal;
+}) {
+	const res = await fetch(URL + `/repos/${repo}/issues/${number}/comments`, {
+		headers,
+		signal,
+	});
+	return res.json() as Promise<IComment[]>;
 }

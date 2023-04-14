@@ -9,6 +9,7 @@ import Page01 from "./pages/01-fetch";
 import * as Page02 from "./pages/02-fetch-complete";
 import * as Page03 from "./pages/03-simple-query";
 import * as Page04 from "./pages/04-pagination";
+import * as Page05 from "./pages/05-depdendent-queries";
 
 const queryClient = new QueryClient({
 	defaultOptions: {
@@ -39,6 +40,20 @@ const router = createBrowserRouter([
 	{
 		path: "/page-04",
 		element: <Page04.IssuesPage />,
+	},
+	{
+		path: "/page-05",
+		element: <Page05.Root />,
+		children: [
+			{
+				path: "",
+				element: <Page05.IssuesPage />,
+			},
+			{
+				path: "issues/:number",
+				element: <Page05.IssuePage />,
+			},
+		],
 	},
 ]);
 
