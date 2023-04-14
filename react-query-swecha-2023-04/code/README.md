@@ -26,3 +26,4 @@ API Secret Key
 - React Router integration * Prefetching Data
 - TypeScript
 - Query Deduplication
+- Bundle Size

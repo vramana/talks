@@ -2,7 +2,7 @@ import { type IIssue } from "../api";
 
 export default function Issue({ issue }: { issue: IIssue }) {
 	return (
-		<div className="p-3 even:bg-zinc-900" key={issue.id}>
+		<div className="p-2 even:bg-zinc-900" key={issue.id}>
 			<div className="text-lg ">
 				<b>{issue.number}</b>: {issue.title}
 			</div>

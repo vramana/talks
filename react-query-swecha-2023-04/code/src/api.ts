@@ -24,7 +24,11 @@ export async function getIssues({
 	signal?: AbortSignal;
 }) {
 	const res = await fetch(
-		URL + `/repos/${repo}/issues?${new URLSearchParams(query).toString()}`,
+		URL +
+			`/repos/${repo}/issues?${new URLSearchParams({
+				...query,
+				per_page: "10",
+			}).toString()}`,
 		{ headers, signal },
 	);
 	return res.json() as Promise<IIssue[]>;

@@ -7,8 +7,17 @@ import "./index.css";
 
 import Page01 from "./pages/01-fetch";
 import * as Page02 from "./pages/02-fetch-complete";
+import * as Page03 from "./pages/03-simple-query";
+import * as Page04 from "./pages/04-pagination";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+	defaultOptions: {
+		queries: {
+			refetchOnWindowFocus: false,
+			retry: false,
+		},
+	},
+});
 
 const router = createBrowserRouter([
 	{
@@ -22,6 +31,14 @@ const router = createBrowserRouter([
 	{
 		path: "/page-02",
 		element: <Page02.IssuesPage />,
+	},
+	{
+		path: "/page-03",
+		element: <Page03.IssuesPage />,
+	},
+	{
+		path: "/page-04",
+		element: <Page04.IssuesPage />,
 	},
 ]);
 

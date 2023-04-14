@@ -13,10 +13,12 @@ export function IssuesPage() {
 		getIssues({ signal: abortController.signal })
 			.then((data) => {
 				setData(data);
+				setError(undefined);
 				setIsLoading(false);
 			})
 			.catch((error) => {
 				setError(error);
+				setData(undefined);
 				setIsLoading(false);
 			});
 		return () => {
