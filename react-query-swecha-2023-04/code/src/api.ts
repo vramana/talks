@@ -30,9 +30,13 @@ export function makeKeys<T extends string>(resource: T) {
 	};
 }
 
-const makeHeaders = () => ({
-	Authorization: `Bearer ${import.meta.env.VITE_TOKEN}`,
-});
+const makeHeaders = () => {
+	const token = localStorage.getItem("github_token");
+
+	return {
+		Authorization: `Bearer ${token || import.meta.env.VITE_TOKEN}`,
+	};
+};
 
 export async function getIssues({
 	repo = "facebook/react",

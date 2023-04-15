@@ -9,7 +9,10 @@ export default function Issue({
 	enableLink?: true;
 }) {
 	const content = (
-		<div className="p-2 even:bg-zinc-900" key={issue.id}>
+		<div
+			className="p-2 border-solid border-0 border-b border-gray-300"
+			key={issue.id}
+		>
 			<div className="text-lg ">
 				<b>
 					{issue.pull_request ? "!" : "#"}
@@ -27,7 +30,7 @@ export default function Issue({
 	return enableLink ? (
 		<Link
 			to={`issues/${issue.number}`}
-			className="text-white hover:text-gray-400"
+			className="text-zinc-900 hover:text-gray-400"
 		>
 			{content}
 		</Link>
