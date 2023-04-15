@@ -12,7 +12,7 @@ function App() {
 
 	return (
 		<div>
-			{token != null || token !== "" ? (
+			{token != null && token === "" ? (
 				<>
 					<div className="flex border border-solid border-gray-500 mb-2 rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
 						<input
@@ -27,6 +27,8 @@ function App() {
 					<div className="flex gap-2">
 						<button
 							onClick={() => {
+								setToken(value);
+								setValue("");
 								localStorage.setItem("github_token", value);
 							}}
 						>
@@ -53,8 +55,9 @@ function App() {
 			{showHelp ? (
 				<p>
 					Unauthorized requests to Github API calls are limited to 60 per hour.
-					To increase this limit, you need to authenticate your requests. Please create 
-          a fine grained Github personal access token that has access and paste it in the input above.
+					To increase this limit, you need to authenticate your requests. Please
+					create a fine grained Github personal access token that has access and
+					paste it in the input above.
 				</p>
 			) : undefined}
 

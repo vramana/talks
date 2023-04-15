@@ -1,5 +1,5 @@
 import { useState, useContext, createContext } from "react";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { marked } from "marked";
 
 const RepoContext = createContext<string>("");
@@ -12,20 +12,24 @@ import { Outlet, useParams } from "react-router-dom";
 export function NewComment() {
 	const [comment, setComment] = useState("");
 	const { number } = useParams();
+	const queryClient = useQueryClient();
 	const repo = useContext(RepoContext);
 
 	const { mutate, isLoading, error } = useMutation({
 		mutationFn: () =>
 			createComment({ repo, number: number as string, body: comment }),
 		onSuccess: () => {
+			queryClient.invalidateQueries([repo, "comments", number]);
 			setComment("");
 		},
+		onError: () => {},
 	});
 
 	return (
 		<div className="border border-solid border-gray-300 rounded-lg p-4 my-2">
 			<div>
 				<textarea
+					style={{ width: "100%", height: 200 }}
 					value={comment}
 					onChange={(e) => setComment(e.target.value)}
 				/>
@@ -48,13 +52,15 @@ export function IssuePage() {
 	const { number } = useParams();
 	const repo = useContext(RepoContext);
 
+	console.log(repo);
+
 	const issue = useQuery({
-		queryKey: ["issue", number],
+		queryKey: [repo, "issue", number],
 		queryFn: ({ signal }) =>
 			getIssue({ repo, number: number as string, signal }),
 	});
 	const comments = useQuery({
-		queryKey: ["comments", number],
+		queryKey: [repo, "comments", number],
 		queryFn: ({ signal }) =>
 			getComments({ repo, number: number as string, signal }),
 		enabled: !!issue.data,
@@ -93,6 +99,7 @@ export function IssuePage() {
 					<div dangerouslySetInnerHTML={{ __html: marked(comment.body) }}></div>
 				</div>
 			))}
+			<NewComment />
 		</>
 	);
 }
@@ -102,7 +109,7 @@ export function IssuesPage() {
 	const repo = useContext(RepoContext);
 
 	const { data, isLoading, error } = useQuery({
-		queryKey: ["issues", page],
+		queryKey: [repo, "issues", page],
 		queryFn: ({ signal }) =>
 			getIssues({ repo, signal, query: { page: String(page) } }),
 	});
